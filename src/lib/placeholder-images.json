@@ -1,0 +1,118 @@
+{
+  "placeholderImages": [
+    {
+      "id": "hero-background",
+      "description": "غرفة معيشة حديثة ومشرقة وجيدة التهوية مع أثاث بسيط.",
+      "imageUrl": "https://images.unsplash.com/photo-1724582586529-62622e50c0b3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w7NDE5ODJ8MHwxfHNlYXJjaHw3fHxtb2Rlcm4lMjBpbnRlcmlvcnxlbnwwfHx8fDE3NjU5NzAyMDN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "modern interior"
+    },
+    {
+      "id": "catalog-hero",
+      "description": "A stylish and modern kitchen interior with clean lines.",
+      "imageUrl": "https://images.unsplash.com/photo-1628745277862-bc0b2d68c50c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxtb2Rlcm4lMjBraXRjaGVufGVufDB8fHx8MTc2NzYxNDE4MXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "modern kitchen"
+    },
+    {
+      "id": "about-image",
+      "description": "لقطة مقربة للتفاصيل المعمارية، تظهر جهاز كمبيوتر محمول على سرير في غرفة مصممة جيدًا.",
+      "imageUrl": "https://images.unsplash.com/photo-1759342246983-7b494aff3506?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxhcmNoaXRlY3R1cmFsJTIwZGV0YWlsfGVufDB8fHx8MTc2NTk4NDI5MHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "architectural detail"
+    },
+    {
+      "id": "project-urban-tranquility",
+      "description": "منطقة لتناول الطعام مع طاولة وكراسي خشبية بنية اللون، تنضح بالدفء والبساطة.",
+      "imageUrl": "https://images.unsplash.com/photo-1604578762246-41134e37f9cc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxkaW5pbmclMjByb29tfGVufDB8fHx8MTc2NjA0NTg3OHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "dining room"
+    },
+    {
+      "id": "project-azure-hallway",
+      "description": "ردهة حديثة وأنيقة مع التركيز على الضوء الطبيعي والألوان المحيطية.",
+      "imageUrl": "https://images.unsplash.com/photo-1759591614436-9eb5f2a25e5f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxtb2Rlcm4lMjBoYWxsd2F5fGVufDB8fHx8MTc2NjA1Njg0MXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "modern hallway"
+    },
+    {
+      "id": "project-coastal-serenity",
+      "description": "غرفة معيشة هادئة بديكور مستوحى من الساحل ونوافذ كبيرة.",
+      "imageUrl": "https://images.unsplash.com/photo-1765579058797-4579458c3260?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxjb2FzdGFsJTIwbGl2aW5nfGVufDB8fHx8MTc2NjA1Njg0MXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "coastal living"
+    },
+    {
+      "id": "testimonial-profile-1",
+      "description": "صورة شخصية لعميل راضٍ.",
+      "imageUrl": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxwZXJzb24lMjBwb3J0cmFpdHxlbnwwfHx8fDE3NjU5NzMyNTN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "person portrait"
+    },
+    {
+      "id": "testimonial-profile-2",
+      "description": "صورة شخصية لعميل راضٍ.",
+      "imageUrl": "https://images.unsplash.com/photo-1580489944761-15a19d654956?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx3b21hbiUyMHNtaWxpbmd8ZW58MHx8fHwxNzY1OTYyNjcxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "woman smiling"
+    },
+    {
+      "id": "testimonial-profile-3",
+      "description": "صورة شخصية لعميل راضٍ.",
+      "imageUrl": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxtYW4lMjBwb3J0cmFpdHxlbnwwfHx8fDE3NjYwNTI3Njl8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "man portrait"
+    },
+    {
+      "id": "blog-calm-spaces",
+      "description": "غرفة معيشة مريحة مع أريكة مريحة وإضاءة ناعمة.",
+      "imageUrl": "https://images.unsplash.com/photo-1648880689952-4d76f2a10c3b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxjb3p5JTIwbGl2aW5nfGVufDB8fHx8MTc2NjA1Njg0MXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "cozy living"
+    },
+    {
+      "id": "blog-minimalist-mindset",
+      "description": "لقطة داخلية تركز على أرضية من الطوب النظيف وجدار أبيض عادي.",
+      "imageUrl": "https://images.unsplash.com/photo-1583329550487-0fa300a4cd1a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxtaW5pbWFsaXN0JTIwaW50ZXJpb3J8ZW58MHx8fHwxNzY2MDM0NTgzfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "minimalist interior"
+    },
+    {
+      "id": "cta-background",
+      "description": "سرير مصنوع بشكل جميل مع إطار سرير خشبي بني في غرفة نوم بسيطة.",
+      "imageUrl": "https://images.unsplash.com/photo-1552558636-f6a8f071c2b3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxtaW5pbWFsaXN0JTIwYmVkcm9vbXxlbnwwfHx8fDE3NjU5OTI5MzJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "minimalist bedroom"
+    },
+    {
+      "id": "service-residential",
+      "description": "غرفة معيشة سكنية حديثة وواسعة مع أثاث أنيق.",
+      "imageUrl": "https://images.unsplash.com/photo-1616046229478-9901c5536a45?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxyZXNpZGVudGlhbCUyMGRlc2lnbnxlbnwwfHx8fDE3NjYxMzM0MjN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "residential design"
+    },
+    {
+      "id": "service-commercial",
+      "description": "مساحة مكتبية تجارية أنيقة ومهنية.",
+      "imageUrl": "https://images.unsplash.com/photo-1522071820081-009f0129c71c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjb21tZXJjaWFsJTIwaW50ZXJpb3J8ZW58MHx8fHwxNzY2MTMzNDIzfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "commercial interior"
+    },
+    {
+      "id": "service-renovations",
+      "description": "غرفة قيد التجديد مع تغييرات هيكلية مرئية.",
+      "imageUrl": "https://images.unsplash.com/photo-1581578731548-c64695cc6952?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxpbvRlcmlvciUyMHJlbm92YXRpb25zfGVufDB8fHx8MTc2NjEzMzQyM3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "interior renovations"
+    },
+    {
+      "id": "service-styling",
+      "description": "لقطة مقربة لعناصر ديكور مصممة بشكل جميل على رف.",
+      "imageUrl": "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxzdHlsaW5nJTIwZGVjb3J8ZW58MHx8fHwxNzY2MTMzNDIzfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "styling decor"
+    },
+    {
+      "id": "service-virtual",
+      "description": "شخص يستخدم جهاز كمبيوتر محمول لإجراء استشارة تصميم افتراضية.",
+      "imageUrl": "https://images.unsplash.com/photo-1516321497487-e288fb19713f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx2aXJ0dWFsJTIwZGVzaWdufGVufDB8fHx8MTc2NjEzMzQyM3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "virtual design"
+    },
+    {
+      "id": "category-kitchen-accessories",
+      "description": "مجموعة من إكسسوارات المطبخ الحديثة على سطح عمل.",
+      "imageUrl": "https://images.unsplash.com/photo-1730597363352-0a8fe6eb5d12?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxraXRjaGVuJTIwYWNjZXNzb3JpZXN8ZW58MHx8fHwxNzY3NTU4NjQ2fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "kitchen accessories"
+    },
+    {
+      "id": "category-cabinet-accessories",
+      "description": "لقطة مقربة لمقابض ومفصلات خزانة أنيقة.",
+      "imageUrl": "https://images.unsplash.com/photo-1762280237740-5a9292e527ab?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxjYWJpbmV0JTIwYWNjZXNzb3JpZXN8ZW58MHx8fHwxNzY3NTU4NjQ1fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "cabinet accessories"
+    }
+  ]
+}

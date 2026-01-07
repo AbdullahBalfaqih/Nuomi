@@ -1,0 +1,280 @@
+
+{
+  "entities": {
+    "UserProfile": {
+      "title": "User Profile",
+      "description": "Represents a user's profile in the system.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid",
+          "description": "The user's unique ID, references auth.users.id."
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "The user's email address."
+        },
+        "name": {
+          "type": "string",
+          "description": "The user's display name."
+        },
+        "username": {
+          "type": "string",
+          "description": "The user's username."
+        },
+        "avatar": {
+          "type": "string",
+          "format": "uri",
+          "description": "URL of the user's profile picture."
+        },
+        "phone": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string",
+          "enum": [
+            "admin",
+            "customer"
+          ],
+          "description": "The role of the user, determining their access level."
+        }
+      },
+      "required": [
+        "id",
+        "email",
+        "name",
+        "username",
+        "role"
+      ]
+    },
+    "Product": {
+      "title": "Product",
+      "description": "Represents a product in the catalog.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "price": {
+          "type": "number"
+        },
+        "category": {
+          "type": "string",
+          "enum": [
+            "مطابخ",
+            "خزائن",
+            "اكسسوارات مطابخ",
+            "اكسسوارات خزائن",
+            "ديكورات"
+          ]
+        },
+        "model": {
+          "type": "string"
+        },
+        "size": {
+          "type": "string"
+        },
+        "dimensions": {
+          "type": "string"
+        },
+        "stock": {
+          "type": "number"
+        },
+        "imageUrl": {
+          "type": "string",
+          "format": "uri"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "price",
+        "category"
+      ]
+    },
+    "Order": {
+      "title": "Order",
+      "description": "Represents a customer order.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "user_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "customer_name": {
+          "type": "string"
+        },
+        "customer_email": {
+          "type": "string",
+          "format": "email"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "total": {
+          "type": "number"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "قيد المعالجة",
+            "مكتمل",
+            "مرفوض",
+            "ملغي"
+          ]
+        },
+        "shipping_address": {
+          "type": "string"
+        },
+        "proof_of_purchase_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "user_id",
+        "customer_name",
+        "customer_email",
+        "items",
+        "total",
+        "status",
+        "created_at"
+      ]
+    },
+    "Setting": {
+      "title": "Setting",
+      "description": "Represents a single key-value setting for the store.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "number" },
+        "key": { "type": "string" },
+        "value": { "type": "string" },
+        "created_at": { "type": "string", "format": "date-time" }
+      },
+      "required": ["key"]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password"
+    ]
+  },
+  "database": {
+    "schema": "public",
+    "tables": [
+      {
+        "name": "users",
+        "schema": {
+          "$ref": "#/backend/entities/UserProfile"
+        },
+        "description": "Stores public information about a user, synced with the auth.users table."
+      },
+      {
+        "name": "products",
+        "schema": {
+          "$ref": "#/backend/entities/Product"
+        },
+        "description": "Stores individual product details."
+      },
+      {
+        "name": "orders",
+        "schema": {
+          "$ref": "#/backend/entities/Order"
+        },
+        "description": "Stores customer orders."
+      },
+      {
+        "name": "settings",
+        "schema": {
+          "$ref": "#/backend/entities/Setting"
+        },
+        "description": "Stores key-value settings for the application."
+      }
+    ],
+    "sql_setup": [
+      "-- SQL to create the public.users table",
+      "CREATE TABLE IF NOT EXISTS public.users (",
+      "  id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,",
+      "  username TEXT UNIQUE NOT NULL,",
+      "  email TEXT UNIQUE NOT NULL,",
+      "  name TEXT,",
+      "  phone TEXT,",
+      "  city TEXT,",
+      "  address TEXT,",
+      "  avatar TEXT,",
+      "  role TEXT NOT NULL DEFAULT 'customer',",
+      "  created_at TIMESTAMPTZ DEFAULT NOW()",
+      ");",
+      "",
+      "-- SQL to create the public.products table",
+      "CREATE TABLE IF NOT EXISTS public.products (",
+      "  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),",
+      "  name TEXT NOT NULL,",
+      "  price NUMERIC NOT NULL,",
+      "  category TEXT NOT NULL,",
+      "  stock INTEGER DEFAULT 0,",
+      "  model TEXT,",
+      "  size TEXT,",
+      "  dimensions TEXT,",
+      "  \"imageUrl\" TEXT,",
+      "  created_at TIMESTAMPTZ DEFAULT NOW()",
+      ");",
+      "",
+      "-- Custom type for order status",
+      "DO $$ BEGIN",
+      "  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'order_status') THEN",
+      "    CREATE TYPE public.order_status AS ENUM ('قيد المعالجة', 'مكتمل', 'مرفوض', 'ملغي');",
+      "  END IF;",
+      "END $$;",
+      "",
+      "-- SQL to create the public.orders table",
+      "CREATE TABLE IF NOT EXISTS public.orders (",
+      "  id uuid NOT NULL primary key default uuid_generate_v4(),",
+      "  user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,",
+      "  customer_name TEXT NOT NULL,",
+      "  customer_email TEXT NOT NULL,",
+      "  items JSONB NOT NULL,",
+      "  total NUMERIC NOT NULL,",
+      "  status public.order_status NOT NULL DEFAULT 'قيد المعالجة',",
+      "  shipping_address TEXT,",
+      "  proof_of_purchase_url TEXT,",
+      "  created_at TIMESTAMPTZ DEFAULT NOW()",
+      ");",
+      "",
+      "-- SQL to create the public.settings table",
+      "CREATE TABLE IF NOT EXISTS public.settings (",
+      "  id SERIAL PRIMARY KEY,",
+      "  key TEXT UNIQUE NOT NULL,",
+      "  value TEXT,",
+      "  created_at TIMESTAMPTZ DEFAULT NOW()",
+      ");"
+    ]
+  }
+}

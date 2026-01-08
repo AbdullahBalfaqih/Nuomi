@@ -252,29 +252,12 @@ export default function CatalogPage() {
                                 <SelectItem value="price_desc">السعر: من الأعلى للأقل</SelectItem>
                             </SelectContent>
                               </Select>
-                              <div
-                                  className="flex items-center gap-3 bg-background rounded-lg px-3 h-11 cursor-pointer select-none"
-                                  onClick={() => setShowPrices(!showPrices)}
-                              >
-                                  {showPrices ? (
-                                      <Eye className="h-4 w-4 text-primary" />
-                                  ) : (
-                                      <EyeOff className="h-4 w-4 text-muted-foreground" />
-                                  )}
-
-                                  <span className="text-sm font-medium">الأسعار</span>
-
-                                  <Switch
-                                      id="show-prices"
-                                      checked={showPrices}
-                                      onCheckedChange={setShowPrices}
-                                      className="
-    ms-2
-    rtl:[&>span]:data-[state=checked]:-translate-x-5
-    rtl:[&>span]:data-[state=unchecked]:translate-x-0
-  "
-                                  />
-
+                              <div className="flex items-center gap-2 bg-background rounded-lg p-2 h-11">
+                                  <Label htmlFor="show-prices" className="flex items-center gap-2 cursor-pointer">
+                                      {showPrices ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
+                                      <span className="text-sm font-medium">الأسعار</span>
+                                      <Switch id="show-prices" checked={showPrices} onCheckedChange={setShowPrices} className="ms-2" />
+                                  </Label>
                               </div>
 
                     </div>

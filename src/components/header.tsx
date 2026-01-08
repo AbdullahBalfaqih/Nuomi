@@ -122,7 +122,6 @@ export default function Header() {
     const userAvatarFallback = userDisplayName ? userDisplayName.charAt(0).toUpperCase() : '?';
 
     const isUserLoggedIn = isMounted && isAuthenticated;
-
     return (
         <>
             <div className="fixed top-0 left-0 right-0 z-50 h-20 text-foreground">
@@ -198,20 +197,16 @@ export default function Header() {
                                             <p className="text-xs text-muted-foreground truncate">{user?.email}</p>
                                         </div>
                                         <Separator />
-                                        <SheetClose asChild>
-                                            <Link href="/profile" className="inline-flex items-center gap-2 w-full text-sm p-2 rounded-md hover:bg-accent cursor-pointer">
-                                                <UserIcon className="h-4 w-4" />
-                                                ملفي الشخصي
-                                            </Link>
-                                        </SheetClose>
+                                        <Link href="/profile" onClick={() => setPopoverOpen(false)} className="inline-flex items-center gap-2 w-full text-sm p-2 rounded-md hover:bg-accent cursor-pointer">
+                                            <UserIcon className="h-4 w-4" />
+                                            ملفي الشخصي
+                                        </Link>
 
                                         {isAdmin && (
-                                            <SheetClose asChild>
-                                                <Link href="/admin" className="inline-flex items-center gap-2 w-full text-sm p-2 rounded-md hover:bg-accent cursor-pointer">
-                                                    <LayoutDashboard className="h-4 w-4" />
-                                                    لوحة تحكم المشرف
-                                                </Link>
-                                            </SheetClose>
+                                            <Link href="/admin" onClick={() => setPopoverOpen(false)} className="inline-flex items-center gap-2 w-full text-sm p-2 rounded-md hover:bg-accent cursor-pointer">
+                                                <LayoutDashboard className="h-4 w-4" />
+                                                لوحة تحكم المشرف
+                                            </Link>
                                         )}
                                         <Separator />
                                         <Button variant="ghost" className="w-full justify-start cursor-pointer text-destructive hover:text-destructive h-auto p-2 text-sm gap-2" onClick={() => { setShowLogoutDialog(true); setPopoverOpen(false); }}>

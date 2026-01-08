@@ -139,7 +139,7 @@ export default function CheckoutPage() {
 
             const result = await createOrder(orderData);
 
-            if (result.error) {
+            if (result.error || !result.order) {
                 toast({
                     title: 'فشل إرسال الطلب',
                     description: result.error,
@@ -151,6 +151,38 @@ export default function CheckoutPage() {
                     description: 'شكرًا لك، تم استلام طلبك وسنتواصل معك قريبًا.',
                     className: 'bg-green-100 dark:bg-green-800/30 text-green-800 dark:text-green-200 border-green-200 dark:border-green-700'
                 });
+
+                // Prepare WhatsApp message
+                const customerName = result.order.customer_name;
+                const orderTotal = result.order.total;
+                const orderId = result.order.id.substring(0, 8);
+                const itemsList = result.order.items.map(item => `- ${item.quantity}x ${item.name}`).join('\n');
+
+                const message = `
+*طلب جديد من متجر NUOMI* ✨
+
+مرحباً، تم استلام طلب جديد.
+
+*رقم الطلب:* ${orderId}
+
+*تفاصيل العميل:*
+*الاسم:* ${customerName}
+*البريد الإلكتروني:* ${result.order.customer_email}
+*عنوان الشحن:* ${result.order.shipping_address}
+
+*المنتجات المطلوبة:*
+${itemsList}
+
+*إجمالي الطلب:* ${orderTotal.toFixed(2)} ر.س
+
+${result.order.proof_of_purchase_url ? `*إثبات الدفع:* ${result.order.proof_of_purchase_url}` : ''}
+
+الرجاء مراجعة الطلب في لوحة التحكم.
+`.trim();
+
+                const whatsappUrl = `https://wa.me/966550376786?text=${encodeURIComponent(message)}`;
+                window.open(whatsappUrl, '_blank');
+
                 clearCart();
                 router.push('/profile');
             }

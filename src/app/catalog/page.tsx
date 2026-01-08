@@ -7,7 +7,7 @@ import Footer from '@/components/footer';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ShoppingCart, Loader2, Search, ListFilter } from 'lucide-react';
+import { ShoppingCart, Loader2, Search, ListFilter, EyeOff, Eye } from 'lucide-react';
 import { categories, Product } from '@/lib/products';
 import { useCart } from '@/app/layout';
 import { useAuthContext } from '@/auth/context';
@@ -21,6 +21,10 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Input } from '@/components/ui/input';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import a from "./1.jpg";
+import B from "./2.png";
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
 
 export default function CatalogPage() {
     const { addToCart } = useCart();
@@ -38,6 +42,7 @@ export default function CatalogPage() {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('all');
     const [sortOption, setSortOption] = useState('newest');
+    const [showPrices, setShowPrices] = useState(true);
 
 
     useEffect(() => {
@@ -156,7 +161,7 @@ export default function CatalogPage() {
             </div>
             <h3 className="font-headline text-lg font-medium truncate text-foreground">{product.name}</h3>
             <div className="flex justify-between items-center mt-2">
-               <PriceDisplay amount={product.price} className="text-lg" />
+                      {showPrices ? <PriceDisplay amount={product.price} className="text-lg" /> : <div />}
               <Button 
                 variant="outline" 
                 size="icon" 
@@ -185,14 +190,12 @@ export default function CatalogPage() {
       <main>
         <header className="relative h-screen min-h-[700px] w-full text-white flex items-center justify-center text-center">
             {catalogHeroImage && (
-                <Image
-                src={catalogHeroImage.imageUrl}
-                alt={catalogHeroImage.description}
-                data-ai-hint={catalogHeroImage.imageHint}
-                fill
-                className="object-cover"
-                priority
-                />
+                      <Image
+                          src={a}
+                          alt="Contact support"
+                          fill
+                          className="object-fill"   // ← Stretch
+                      />
             )}
             <div className="absolute inset-0 bg-black/50" />
             <div className="relative z-10 p-4">
@@ -248,7 +251,32 @@ export default function CatalogPage() {
                                 <SelectItem value="price_asc">السعر: من الأقل للأعلى</SelectItem>
                                 <SelectItem value="price_desc">السعر: من الأعلى للأقل</SelectItem>
                             </SelectContent>
-                        </Select>
+                              </Select>
+                              <div
+                                  className="flex items-center gap-3 bg-background rounded-lg px-3 h-11 cursor-pointer select-none"
+                                  onClick={() => setShowPrices(!showPrices)}
+                              >
+                                  {showPrices ? (
+                                      <Eye className="h-4 w-4 text-primary" />
+                                  ) : (
+                                      <EyeOff className="h-4 w-4 text-muted-foreground" />
+                                  )}
+
+                                  <span className="text-sm font-medium">الأسعار</span>
+
+                                  <Switch
+                                      id="show-prices"
+                                      checked={showPrices}
+                                      onCheckedChange={setShowPrices}
+                                      className="
+    ms-2
+    rtl:[&>span]:data-[state=checked]:-translate-x-5
+    rtl:[&>span]:data-[state=unchecked]:translate-x-0
+  "
+                                  />
+
+                              </div>
+
                     </div>
                 </div>
             </div>
@@ -274,29 +302,30 @@ export default function CatalogPage() {
                         </div>
                     )
               ) : (
-                 <div className="space-y-24">
-                  {categories.map(category => {
-                    const categoryProducts = allProducts.filter(p => p.category === category.name);
-                    const categoryImage = category.name === 'اكسسوارات مطابخ' ? categoryKitchenImage : categoryCabinetImage;
+                                  <div className="space-y-24">
+                                      {categories.map(category => {
+                                          const categoryProducts = allProducts.filter(p => p.category === category.name);
+                                          const categoryImage = category.name === 'اكسسوارات مطابخ' ? categoryKitchenImage : categoryCabinetImage;
 
-                    return (
-                      <section key={category.name} className="relative">
-                         <div className="grid md:grid-cols-2 gap-12 items-center">
-                            <div className="relative aspect-square md:aspect-[4/5] rounded-2xl overflow-hidden bg-muted">
-                               {categoryImage && <Image src={categoryImage.imageUrl} alt={category.name} fill className="object-cover" />}
-                            </div>
-                            <div className="md:pe-12 text-center md:text-right">
-                                <h2 className="font-headline text-4xl md:text-5xl font-bold">{category.name}</h2>
-                                <p className="mt-4 text-lg text-muted-foreground max-w-md mx-auto md:mx-0">{category.description}</p>
-                            </div>
-                         </div>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 mt-12">
-                          {categoryProducts.slice(0,4).map(renderProductCard)}
-                        </div>
-                      </section>
-                    )
-                  })}
-                 </div>
+                                          return (
+                                              <section key={category.name} className="relative">
+                                                  <div className="grid md:grid-cols-2 gap-12 items-center">
+                                                      <div className="relative aspect-square md:aspect-[4/5] rounded-2xl overflow-hidden bg-muted">
+                                                          {categoryImage && <Image src={categoryImage.imageUrl} alt={category.name} fill className="object-cover" />}
+                                                      </div>
+                                                      <div className="md:pe-12 text-center md:text-right">
+                                                          <h2 className="font-headline text-4xl md:text-5xl font-bold">{category.name}</h2>
+                                                          <p className="mt-4 text-lg text-muted-foreground max-w-md mx-auto md:mx-0">{category.description}</p>
+                                                      </div>
+                                                  </div>
+                                                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 mt-12">
+                                                      {categoryProducts.slice(0, 4).map(renderProductCard)}
+                                                  </div>
+                                              </section>
+
+                                          )
+                                      })}
+                                  </div>
               )}
             </div>
         </div>

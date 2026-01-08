@@ -41,7 +41,7 @@ const legalLinks = [
 const contactInfo = [
     { icon: Phone, label: "الهاتف", details: [ "966550376786+"] },
     { icon: Mail, label: "البريد الإلكتروني", details: ["nuomi.ksa@gmail.com"] },
-    { icon: MapPin, label: "العنوان", details: ["الدمام, المملكة العربية السعودية"] },
+    { icon: MapPin, label: "العنوان", details: ["القــطــيـف, المملكة العربية السعودية"] },
     { icon: Clock, label: "ساعات العمل", details: ["من السبت إلى الخميس: 9:00 صباحًا - 8:30 مساءً", "الجمعة: مغلق"] },
 ]
 
@@ -55,8 +55,7 @@ export default function Footer() {
             {/* Column 1: Contact Info & Description */}
             <div className="flex flex-col gap-8">
                 <p className="text-stone-300 max-w-sm text-lg opacity-80 leading-relaxed">
-                    شركة الهندسة المعمارية رقم 1 في تكساس، نحول الأحلام إلى مساحات جميلة وعملية. من المنازل المريحة إلى التصاميم المبتكرة، نحقق رؤيتك - تفصيلاً بتفصيل. فلنصنع شيئًا مذهلاً معًا!
-                </p>
+تشكيلة حصرية من إكسسوارات المطابخ والخزائن تضيف لمسة فاخرة وتحسّن من استغلال المساحة.                </p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                     {contactInfo.map(item => (
                         <div key={item.label} className="flex flex-col gap-3">

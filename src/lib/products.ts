@@ -1,3 +1,6 @@
+import a from "./2.png";
+import type { StaticImageData } from 'next/image';
+
 export type Product = {
     id: string;
     created_at: string;
@@ -14,21 +17,21 @@ export type Product = {
 export type Category = {
     name: 'اكسسوارات مطابخ' | 'اكسسوارات خزائن';
     description: string;
-    imageUrl: string;
+    imageUrl: StaticImageData | string; 
     imageHint: string;
 };
 
 export const categories: Category[] = [
-  {
-    name: 'اكسسوارات مطابخ',
-    description: 'اللمسات النهائية التي تحول مطبخك. من المقابض الأنيقة إلى حلول التخزين الذكية، تم اختيار كل قطعة لتعزيز الجمال والوظائف.',
-    imageUrl: 'https://picsum.photos/seed/kitchen-accessories/1600/900',
-    imageHint: 'kitchen accessories',
-  },
+{
+  name: 'اكسسوارات مطابخ',
+  description: 'استكشف مجموعتنا المختارة من إكسسوارات المطابخ والخزائن المصممة لإضافة الأناقة والوظائف إلى مساحتك.',
+  imageUrl: a, // ← نربطها بالصورة مباشرة
+  imageHint: 'kitchen accessories',
+},
     {
     name: 'اكسسوارات خزائن',
     description: 'ارتقِ بخزائنك مع مجموعتنا من الإكسسوارات الفاخرة. نظم مساحتك بأناقة مع المقسمات والمقابض المصممة.',
-    imageUrl: 'https://picsum.photos/seed/cabinet-accessories/1600/900',
+    imageUrl: ' ',
     imageHint: 'cabinet accessories',
   },
 ];

@@ -22,7 +22,6 @@ import { useEffect, useState, useTransition, useCallback } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { createOrder } from '@/lib/orders';
 import { createSignedUploadUrl } from '@/app/admin/settings/actions';
-import { createClient } from '@/utils/supabase/client';
 import PriceDisplay from '@/components/ui/price-display';
 
 const checkoutSchema = z.object({
@@ -133,7 +132,7 @@ export default function CheckoutPage() {
           taxAmount: tax,
           total: total,
           items: JSON.stringify(items.map(item => {
-            const { imageUrl, ...rest } = item;
+            const { ...rest } = item;
             return rest;
           })),
           proofOfPurchaseUrl: proofUrl,
@@ -155,30 +154,51 @@ export default function CheckoutPage() {
             });
 
             // Prepare WhatsApp message
-            const customerName = result.order.customer_name;
-            const orderTotal = result.order.total;
-            const orderId = result.order.id.substring(0, 8);
-            const itemsList = result.order.items.map(item => `- ${item.quantity}x ${item.name}`).join('\n');
+            const {
+                customer_name,
+                total: orderTotal,
+                subtotal: orderSubtotal,
+                discount_amount,
+                tax_amount,
+                id,
+                customer_email,
+                shipping_address,
+                items: orderItems,
+                proof_of_purchase_url
+            } = result.order;
 
-            const message = `
-*طلب جديد من متجر NUOMI* ✨
+            const orderId = id.substring(0, 8);
+            
+            const itemsList = orderItems.map((item, index) => 
+                `*${index + 1}. ${item.name}*` +
+                `\n   - الكمية: ${item.quantity}` +
+                `\n   - الموديل: ${item.model || 'لا يوجد'}`
+            ).join('\n\n');
 
-مرحباً، تم استلام طلب جديد.
+            const message = `*طلب جديد من متجر NUOMI* ✨
+=========================
 
-*رقم الطلب:* ${orderId}
+*رقم الطلب:* \`#${orderId}\`
 
 *تفاصيل العميل:*
-*الاسم:* ${customerName}
-*البريد الإلكتروني:* ${result.order.customer_email}
-*عنوان الشحن:* ${result.order.shipping_address}
+  • *الاسم:* ${customer_name}
+  • *البريد الإلكتروني:* ${customer_email}
+  • *عنوان الشحن:* ${shipping_address}
 
+-----------------------------------
 *المنتجات المطلوبة:*
 ${itemsList}
+-----------------------------------
 
-*إجمالي الطلب:* ${orderTotal.toFixed(2)} ر.س
+*الملخص المالي:*
+  • *المجموع الفرعي:* ${orderSubtotal.toFixed(2)} ر.س
+  • *الخصم:* ${discount_amount.toFixed(2)} ر.س
+  • *الضريبة (15%):* ${tax_amount.toFixed(2)} ر.س
+  • *الإجمالي:* *${orderTotal.toFixed(2)} ر.س*
 
-${result.order.proof_of_purchase_url ? `*إثبات الدفع:* ${result.order.proof_of_purchase_url}` : ''}
+${proof_of_purchase_url ? `\n*إثبات الدفع:* ${proof_of_purchase_url}` : ''}
 
+=========================
 الرجاء مراجعة الطلب في لوحة التحكم.
 `.trim();
 

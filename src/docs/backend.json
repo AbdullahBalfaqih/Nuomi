@@ -45,6 +45,10 @@
             "customer"
           ],
           "description": "The role of the user, determining their access level."
+        },
+        "discount": {
+            "type": "number",
+            "description": "The discount percentage for the user."
         }
       },
       "required": [
@@ -132,6 +136,15 @@
           "items": {
             "type": "object"
           }
+        },
+        "subtotal": {
+            "type": "number"
+        },
+        "discount_amount": {
+            "type": "number"
+        },
+        "tax_amount": {
+            "type": "number"
         },
         "total": {
           "type": "number"
@@ -252,6 +265,7 @@
       "  address TEXT,",
       "  avatar TEXT,",
       "  role TEXT NOT NULL DEFAULT 'customer',",
+      "  discount NUMERIC DEFAULT 0,",
       "  created_at TIMESTAMPTZ DEFAULT NOW()",
       ");",
       "",
@@ -283,6 +297,9 @@
       "  customer_name TEXT NOT NULL,",
       "  customer_email TEXT NOT NULL,",
       "  items JSONB NOT NULL,",
+      "  subtotal NUMERIC NOT NULL,",
+      "  discount_amount NUMERIC NOT NULL,",
+      "  tax_amount NUMERIC NOT NULL,",
       "  total NUMERIC NOT NULL,",
       "  status public.order_status NOT NULL DEFAULT 'قيد المعالجة',",
       "  shipping_address TEXT,",

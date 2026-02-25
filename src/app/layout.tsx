@@ -1,4 +1,3 @@
-
 'use client';
 import type { Metadata } from 'next';
 import { Toaster } from "@/components/ui/toaster"
@@ -10,16 +9,14 @@ import type { Product } from '@/lib/products';
 import { AuthProvider, useAuthContext } from '@/auth/context';
 
 // A version of Product without unused fields for the cart
-export interface CartProduct extends Omit<Product, 'created_at' | 'stock' | 'size' | 'dimensions'> {}
-
-export interface CartItem extends CartProduct {
-  imageUrl?: string;
+export type CartItem = Omit<Product, 'created_at' | 'stock' | 'size' | 'dimensions'> & {
   quantity: number;
-}
+};
+
 
 interface CartState {
   items: CartItem[];
-  addToCart: (product: CartProduct, quantity?: number) => void;
+  addToCart: (product: Product, quantity?: number) => void;
   removeFromCart: (productId: string) => void;
   updateQuantity: (productId: string, quantity: number) => void;
   clearCart: () => void;
@@ -67,7 +64,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const tax = subtotalAfterDiscount * TAX_RATE;
   const total = subtotalAfterDiscount + tax;
 
-  const addToCart = (product: CartProduct, quantity: number = 1) => {
+  const addToCart = (product: Product, quantity: number = 1) => {
     setItems(prevItems => {
       const existingItem = prevItems.find(item => item.id === product.id);
       if (existingItem) {
@@ -75,7 +72,15 @@ export function CartProvider({ children }: { children: ReactNode }) {
           item.id === product.id ? { ...item, quantity: item.quantity + quantity } : item
         );
       }
-      return [...prevItems, { ...product, imageUrl: product.imageUrl, quantity }];
+      
+      const { created_at, stock, size, dimensions, ...cartProductData } = product;
+      
+      const newItem: CartItem = {
+        ...cartProductData,
+        quantity,
+      };
+
+      return [...prevItems, newItem];
     });
   };
 

@@ -13,6 +13,9 @@ export interface Order {
   customer_name: string;
   customer_email: string;
   items: CartItem[]; // Stored as JSONB
+  subtotal: number;
+  discount_amount: number;
+  tax_amount: number;
   total: number;
   status: 'قيد المعالجة' | 'مكتمل' | 'مرفوض' | 'ملغي';
   shipping_address: string;
@@ -27,7 +30,10 @@ export async function createOrder(
     customerName: string;
     customerEmail: string;
     shippingAddress: string;
-    total: string;
+    subtotal: number;
+    discountAmount: number;
+    taxAmount: number;
+    total: number;
     items: string;
     proofOfPurchaseUrl: string | null;
   }
@@ -38,6 +44,9 @@ export async function createOrder(
       customerName,
       customerEmail,
       shippingAddress,
+      subtotal,
+      discountAmount,
+      taxAmount,
       total,
       items,
       proofOfPurchaseUrl
@@ -56,7 +65,10 @@ export async function createOrder(
       customer_name: customerName,
       customer_email: customerEmail,
       shipping_address: shippingAddress,
-      total: parseFloat(total),
+      subtotal: subtotal,
+      discount_amount: discountAmount,
+      tax_amount: taxAmount,
+      total: total,
       items: JSON.parse(items),
       status: 'قيد المعالجة' as const,
       proof_of_purchase_url: proofOfPurchaseUrl,

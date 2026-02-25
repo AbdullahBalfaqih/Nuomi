@@ -7,119 +7,130 @@ import { MotionProvider } from '@/components/motion/motion-provider';
 import { FirebaseClientProvider } from '@/firebase';
 import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import type { Product } from '@/lib/products';
-import { AuthProvider } from '@/auth/context';
+import { AuthProvider, useAuthContext } from '@/auth/context';
 
-// A version of Product without image fields for the cart
-export interface CartProduct extends Omit<Product, 'created_at' | 'stock' | 'model' | 'size' | 'dimensions'> { }
+// A version of Product without unused fields for the cart
+export interface CartProduct extends Omit<Product, 'created_at' | 'stock' | 'size' | 'dimensions'> {}
 
 export interface CartItem extends CartProduct {
-    imageUrl?: string;
-    quantity: number;
+  imageUrl?: string;
+  quantity: number;
 }
 
 interface CartState {
-    items: CartItem[];
-    addToCart: (product: CartProduct, quantity?: number) => void;
-    removeFromCart: (productId: string) => void;
-    updateQuantity: (productId: string, quantity: number) => void;
-    clearCart: () => void;
-    subtotal: number;
+  items: CartItem[];
+  addToCart: (product: CartProduct, quantity?: number) => void;
+  removeFromCart: (productId: string) => void;
+  updateQuantity: (productId: string, quantity: number) => void;
+  clearCart: () => void;
+  subtotal: number;
+  discount: number;
+  tax: number;
+  total: number;
 }
 
 const CartContext = createContext<CartState | undefined>(undefined);
 
 export function useCart() {
-    const context = useContext(CartContext);
-    if (context === undefined) {
-        throw new Error('useCart must be used within a CartProvider');
-    }
-    return context;
+  const context = useContext(CartContext);
+  if (context === undefined) {
+    throw new Error('useCart must be used within a CartProvider');
+  }
+  return context;
 }
 
 export function CartProvider({ children }: { children: ReactNode }) {
-    const [items, setItems] = useState<CartItem[]>([]);
-    const [isMounted, setIsMounted] = useState(false);
+  const [items, setItems] = useState<CartItem[]>([]);
+  const [isMounted, setIsMounted] = useState(false);
+  const { user } = useAuthContext();
 
-    useEffect(() => {
-        setIsMounted(true);
-        const savedCart = localStorage.getItem('cart');
-        if (savedCart) {
-            setItems(JSON.parse(savedCart));
-        }
-    }, []);
+  const TAX_RATE = 0.15; // 15%
 
-    useEffect(() => {
-        if (isMounted) {
-            localStorage.setItem('cart', JSON.stringify(items));
-        }
-    }, [items, isMounted]);
-
-    const subtotal = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
-
-    const addToCart = (product: CartProduct, quantity: number = 1) => {
-        setItems(prevItems => {
-            const existingItem = prevItems.find(item => item.id === product.id);
-            if (existingItem) {
-                return prevItems.map(item =>
-                    item.id === product.id ? { ...item, quantity: item.quantity + quantity } : item
-                );
-            }
-            return [...prevItems, { ...product, quantity }];
-        });
-    };
-
-    const removeFromCart = (productId: string) => {
-        setItems(prevItems => prevItems.filter(item => item.id !== productId));
-    };
-
-    const updateQuantity = (productId: string, quantity: number) => {
-        if (quantity <= 0) {
-            removeFromCart(productId);
-            return;
-        }
-        setItems(prevItems =>
-            prevItems.map(item => (item.id === productId ? { ...item, quantity } : item))
-        );
-    };
-
-    const clearCart = () => {
-        setItems([]);
-    };
-
-    if (!isMounted) {
-        return null;
+  useEffect(() => {
+    setIsMounted(true);
+    const savedCart = localStorage.getItem('cart');
+    if (savedCart) {
+        setItems(JSON.parse(savedCart));
     }
+  }, []);
 
-    return (
-        <CartContext.Provider value={{ items, addToCart, removeFromCart, updateQuantity, clearCart, subtotal }}>
-            {children}
-        </CartContext.Provider>
+  useEffect(() => {
+    if (isMounted) {
+      localStorage.setItem('cart', JSON.stringify(items));
+    }
+  }, [items, isMounted]);
+  
+  const subtotal = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
+  const userDiscountPercentage = user?.user_metadata?.discount || 0;
+  const discount = (subtotal * userDiscountPercentage) / 100;
+  const subtotalAfterDiscount = subtotal - discount;
+  const tax = subtotalAfterDiscount * TAX_RATE;
+  const total = subtotalAfterDiscount + tax;
+
+  const addToCart = (product: CartProduct, quantity: number = 1) => {
+    setItems(prevItems => {
+      const existingItem = prevItems.find(item => item.id === product.id);
+      if (existingItem) {
+        return prevItems.map(item =>
+          item.id === product.id ? { ...item, quantity: item.quantity + quantity } : item
+        );
+      }
+      return [...prevItems, { ...product, imageUrl: product.imageUrl, quantity }];
+    });
+  };
+
+  const removeFromCart = (productId: string) => {
+    setItems(prevItems => prevItems.filter(item => item.id !== productId));
+  };
+
+  const updateQuantity = (productId: string, quantity: number) => {
+    if (quantity <= 0) {
+      removeFromCart(productId);
+      return;
+    }
+    setItems(prevItems =>
+      prevItems.map(item => (item.id === productId ? { ...item, quantity } : item))
     );
+  };
+
+  const clearCart = () => {
+    setItems([]);
+  };
+
+  if (!isMounted) {
+    return null;
+  }
+
+  return (
+    <CartContext.Provider value={{ items, addToCart, removeFromCart, updateQuantity, clearCart, subtotal, discount, tax, total }}>
+      {children}
+    </CartContext.Provider>
+  );
 }
 
 export default function RootLayout({
-    children,
+  children,
 }: Readonly<{
-    children: React.ReactNode;
+  children: React.ReactNode;
 }>) {
-    return (
-        <html lang="ar" dir="rtl">
-            <head>
-                <title>NUOMI - تصميم وديكور داخلي فاخر</title>
-                <meta name="description" content="NUOMI هو قالب متميز لمصممي الديكور والمهندسين المعماريين واستوديوهات التصميم." />
-            </head>
-            <body className="font-body antialiased">
-                <FirebaseClientProvider>
-                    <AuthProvider>
-                        <CartProvider>
-                            <MotionProvider>
-                                {children}
-                            </MotionProvider>
-                            <Toaster />
-                        </CartProvider>
-                    </AuthProvider>
-                </FirebaseClientProvider>
-            </body>
-        </html>
-    );
+  return (
+    <html lang="ar" dir="rtl">
+      <head>
+        <title>NUOMI - تصميم وديكور داخلي فاخر</title>
+        <meta name="description" content="NUOMI هو قالب متميز لمصممي الديكور والمهندسين المعماريين واستوديوهات التصميم." />
+      </head>
+      <body className="font-body antialiased">
+        <FirebaseClientProvider>
+          <AuthProvider>
+            <CartProvider>
+              <MotionProvider>
+                {children}
+              </MotionProvider>
+              <Toaster />
+            </CartProvider>
+          </AuthProvider>
+        </FirebaseClientProvider>
+      </body>
+    </html>
+  );
 }

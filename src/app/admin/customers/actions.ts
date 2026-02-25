@@ -17,6 +17,7 @@ export interface Customer {
   city: string;
   address: string;
   role: UserRole;
+  discount: number;
 }
 
 const createSupabaseAdminClient = () => {
@@ -50,7 +51,7 @@ export async function getUsers(): Promise<{ data?: Customer[]; error?: string }>
         // Fetch users from the public.users table
         const { data: dbUsers, error: dbError } = await supabaseAdmin
             .from('users')
-            .select('id, username, phone, city, address, role')
+            .select('id, username, phone, city, address, role, discount')
             .in('id', userIds);
             
         if (dbError) {
@@ -64,6 +65,7 @@ export async function getUsers(): Promise<{ data?: Customer[]; error?: string }>
             const dbUser = dbUsersMap.get(user.id);
             // The role from user_metadata is the source of truth if the public.users table is out of sync
             const role = user.user_metadata?.role || dbUser?.role || 'customer';
+            const discount = user.user_metadata?.discount || dbUser?.discount || 0;
 
             return {
                 id: user.id,
@@ -74,7 +76,8 @@ export async function getUsers(): Promise<{ data?: Customer[]; error?: string }>
                 phone: dbUser?.phone || user.user_metadata?.phone || 'N/A',
                 city: dbUser?.city || user.user_metadata?.city || 'N/A',
                 address: dbUser?.address || user.user_metadata?.address || 'N/A',
-                role: role
+                role: role,
+                discount: discount,
             };
         });
 
@@ -95,6 +98,7 @@ export async function createUser(formData: FormData): Promise<{ success?: boolea
   const city = formData.get('city') as string;
   const address = formData.get('address') as string;
   const role = (formData.get('role') as UserRole) || 'customer';
+  const discount = parseFloat(formData.get('discount') as string) || 0;
   
   if (!email || !password || !name) {
     return { error: 'الاسم والبريد الإلكتروني وكلمة المرور حقول مطلوبة.' };
@@ -106,7 +110,7 @@ export async function createUser(formData: FormData): Promise<{ success?: boolea
     email,
     password,
     email_confirm: true,
-    user_metadata: { name, username, phone, city, address, role },
+    user_metadata: { name, username, phone, city, address, role, discount },
   });
 
   if (authError) {
@@ -124,6 +128,7 @@ export async function createUser(formData: FormData): Promise<{ success?: boolea
           city: city,
           address: address,
           role: role,
+          discount: discount,
       });
 
       if (dbError) {
@@ -148,6 +153,7 @@ export async function updateUser(userId: string, formData: FormData): Promise<{ 
   const city = formData.get('city') as string;
   const address = formData.get('address') as string;
   const role = (formData.get('role') as UserRole) || 'customer';
+  const discount = parseFloat(formData.get('discount') as string) || 0;
 
 
   const supabaseAdmin = createSupabaseAdminClient();
@@ -159,6 +165,7 @@ export async function updateUser(userId: string, formData: FormData): Promise<{ 
   if (city) userMetadata.city = city;
   if (address) userMetadata.address = address;
   if (role) userMetadata.role = role;
+  if (discount) userMetadata.discount = discount;
   
   const updatePayload: any = { user_metadata: userMetadata };
   if (email) {
@@ -184,6 +191,7 @@ export async function updateUser(userId: string, formData: FormData): Promise<{ 
     if (city) dbUpsertPayload.city = city;
     if (address) dbUpsertPayload.address = address;
     if (role) dbUpsertPayload.role = role;
+    if (discount) dbUpsertPayload.discount = discount;
 
   const { error: dbError } = await supabaseAdmin.from('users').upsert(dbUpsertPayload);
 
@@ -230,5 +238,3 @@ export async function deleteUser(userId: string): Promise<{ success?: boolean; e
   revalidatePath('/admin/customers');
   return { success: true };
 }
-
-    

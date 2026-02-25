@@ -32,18 +32,18 @@ import {
 import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuItem } from '@/components/ui/dropdown-menu'
 import {
-    Dialog,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-    DialogDescription,
-    DialogFooter,
-    DialogClose,
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogDescription,
+  DialogFooter,
+  DialogClose,
 } from "@/components/ui/dialog"
 import Image from 'next/image';
 import { useToast } from '@/hooks/use-toast';
-import { getSupabaseBrowserClient } from '@/lib/supabase-client';
+import { useAuthContext } from '@/auth/context';
 import type { Order } from '@/lib/orders';
 import { generateReportHtml } from '@/lib/report-generator';
 import PriceDisplay from '@/components/ui/price-display';
@@ -63,10 +63,11 @@ export default function OrdersPage() {
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
     const [orderToDelete, setOrderToDelete] = useState<string | null>(null);
     const { toast } = useToast();
-    const supabase = getSupabaseBrowserClient();
+    const { supabase } = useAuthContext();
     const [isPending, startTransition] = useTransition();
 
     const fetchOrders = useCallback(async () => {
+        if (!supabase) return;
         setLoading(true);
         const { data, error } = await supabase
             .from('orders')
@@ -105,7 +106,7 @@ export default function OrdersPage() {
             { header: 'الإجمالي', dataKey: 'total' },
             { header: 'المنتجات', dataKey: 'items' },
         ];
-
+        
         const dataToExport = filteredOrders.map(o => ({
             id: o.id.substring(0, 8) + '...',
             customer_name: `${o.customer_name}<br><small style="color: #6b7280;">${o.customer_email}</small>`,
@@ -139,7 +140,7 @@ export default function OrdersPage() {
     const handlePreviousPage = () => {
         setCurrentPage((prev) => (prev > 1 ? prev - 1 : prev));
     };
-
+    
     const handleTabChange = (tab: string) => {
         setActiveTab(tab);
         setCurrentPage(1);
@@ -150,33 +151,33 @@ export default function OrdersPage() {
     };
 
     const handleStatusChange = (orderId: string, newStatus: OrderStatus) => {
-        startTransition(async () => {
-            const result = await updateOrderStatus(orderId, newStatus);
-
-            if (result.error) {
-                toast({ title: 'فشل تحديث الحالة', description: result.error, variant: 'destructive' });
-            } else {
-                if (newStatus === 'مكتمل') {
-                    toast({
-                        title: `تمت الموافقة على الطلب`,
-                        description: `تم تحديث حالة الطلب #${orderId.substring(0, 6)} إلى "مكتمل".`,
-                        className: 'bg-green-100 dark:bg-green-800/30 text-green-800 dark:text-green-200 border-green-200 dark:border-green-700'
-                    });
-                } else if (newStatus === 'مرفوض' || newStatus === 'ملغي') {
-                    toast({
-                        title: `تم رفض/إلغاء الطلب`,
-                        description: `تم تحديث حالة الطلب #${orderId.substring(0, 6)} إلى "${newStatus}".`,
-                        variant: 'destructive'
-                    });
-                } else {
-                    toast({
-                        title: `تم تحديث حالة الطلب`,
-                        description: `تم تحديث حالة الطلب #${orderId.substring(0, 6)} إلى "${newStatus}".`,
-                    });
-                }
-                fetchOrders();
-            }
-        });
+       startTransition(async () => {
+         const result = await updateOrderStatus(orderId, newStatus);
+        
+         if (result.error) {
+            toast({ title: 'فشل تحديث الحالة', description: result.error, variant: 'destructive' });
+         } else {
+             if (newStatus === 'مكتمل') {
+                toast({
+                    title: `تمت الموافقة على الطلب`,
+                    description: `تم تحديث حالة الطلب #${orderId.substring(0,6)} إلى "مكتمل".`,
+                    className: 'bg-green-100 dark:bg-green-800/30 text-green-800 dark:text-green-200 border-green-200 dark:border-green-700'
+                });
+             } else if (newStatus === 'مرفوض' || newStatus === 'ملغي') {
+                 toast({
+                    title: `تم رفض/إلغاء الطلب`,
+                    description: `تم تحديث حالة الطلب #${orderId.substring(0,6)} إلى "${newStatus}".`,
+                    variant: 'destructive'
+                 });
+             } else {
+                toast({
+                    title: `تم تحديث حالة الطلب`,
+                    description: `تم تحديث حالة الطلب #${orderId.substring(0,6)} إلى "${newStatus}".`,
+                });
+             }
+            fetchOrders();
+         }
+       });
     };
 
     const handleDeleteClick = (orderId: string) => {
@@ -188,7 +189,7 @@ export default function OrdersPage() {
         if (!orderToDelete) return;
         startTransition(async () => {
             const result = await deleteOrder(orderToDelete);
-
+            
             if (result.error) {
                 toast({
                     title: 'خطأ في الحذف!',
@@ -196,23 +197,23 @@ export default function OrdersPage() {
                     variant: 'destructive',
                 });
             } else {
-                toast({
+                 toast({
                     title: 'تم الحذف!',
                     description: `تمت إزالة الطلب بنجاح.`,
-                });
+                 });
                 fetchOrders();
             }
             setIsDeleteDialogOpen(false);
             setOrderToDelete(null);
         });
     };
-
+    
     const getStatusBadge = (status: OrderStatus) => {
         switch (status) {
             case 'مكتمل':
                 return <Badge variant="default" className="bg-green-100 text-green-800">{status}</Badge>;
             case 'قيد المعالجة':
-                return <Badge variant="secondary" className="bg-blue-100 text-blue-800">{status}</Badge>;
+                 return <Badge variant="secondary" className="bg-blue-100 text-blue-800">{status}</Badge>;
             case 'مرفوض':
                 return <Badge variant="destructive" className="bg-red-100 text-red-800">{status}</Badge>;
             case 'ملغي':
@@ -280,7 +281,7 @@ export default function OrdersPage() {
                             </TableHeader>
                             <TableBody>
                                 {loading ? (
-                                    <TableRow>
+                                     <TableRow>
                                         <TableCell colSpan={7} className="h-24 text-center">
                                             <Loader2 className="mx-auto h-8 w-8 animate-spin" />
                                         </TableCell>
@@ -295,7 +296,7 @@ export default function OrdersPage() {
                                                     </Button>
                                                 </TableCell>
                                                 <TableCell>
-                                                    <div className="font-medium">#{order.id.substring(0, 6)}...</div>
+                                                    <div className="font-medium">#{order.id.substring(0,6)}...</div>
                                                 </TableCell>
                                                 <TableCell>
                                                     <div className="font-medium">{order.customer_name}</div>
@@ -320,10 +321,10 @@ export default function OrdersPage() {
                                                         <DropdownMenuContent>
                                                             <DropdownMenuLabel>الإجراءات</DropdownMenuLabel>
                                                             <DropdownMenuItem onSelect={() => handleStatusChange(order.id, 'مكتمل')}>
-                                                                <CheckCircle className="ms-2 h-4 w-4 text-green-500" /> موافقة
+                                                                <CheckCircle className="ms-2 h-4 w-4 text-green-500"/> موافقة
                                                             </DropdownMenuItem>
                                                             <DropdownMenuItem onSelect={() => handleStatusChange(order.id, 'مرفوض')}>
-                                                                <XCircle className="ms-2 h-4 w-4 text-red-500" /> رفض
+                                                                <XCircle className="ms-2 h-4 w-4 text-red-500"/> رفض
                                                             </DropdownMenuItem>
                                                             <DropdownMenuSeparator />
                                                             <DropdownMenuItem onSelect={() => handleDeleteClick(order.id)} className="text-destructive">
@@ -344,29 +345,33 @@ export default function OrdersPage() {
                                                                 </div>
                                                                 <div className="space-y-2">
                                                                     <h4 className="font-semibold">العناصر</h4>
-                                                                    <ul className="text-sm text-muted-foreground list-disc ps-4 space-y-1">
+                                                                    <ul className="text-sm text-muted-foreground list-disc ps-4 space-y-3">
                                                                         {order.items.map((item: any) => (
-                                                                            <li key={item.id}>{item.quantity}x {item.name} (<PriceDisplay amount={item.price} />)</li>
+                                                                            <li key={item.id}>
+                                                                                <div>{item.quantity}x {item.name}</div>
+                                                                                {item.model && <div className="text-sm font-semibold ps-2 text-foreground">الموديل: {item.model}</div>}
+                                                                                <div className="ps-2"><PriceDisplay amount={item.price} /></div>
+                                                                            </li>
                                                                         ))}
                                                                     </ul>
                                                                 </div>
                                                                 <div className="space-y-2">
                                                                     <h4 className="font-semibold">إثبات الشراء</h4>
-                                                                    {order.proof_of_purchase_url && (
+                                                                     {order.proof_of_purchase_url && (
                                                                         <Dialog>
                                                                             <DialogTrigger asChild>
                                                                                 <Button variant="outline">عرض الإثبات</Button>
                                                                             </DialogTrigger>
                                                                             <DialogContent className="sm:max-w-md">
                                                                                 <DialogHeader>
-                                                                                    <DialogTitle>إثبات للطلب #{order.id.substring(0, 6)}</DialogTitle>
+                                                                                    <DialogTitle>إثبات للطلب #{order.id.substring(0,6)}</DialogTitle>
                                                                                 </DialogHeader>
                                                                                 <div className="relative aspect-[3/4] w-full mt-4 rounded-md overflow-hidden">
                                                                                     <Image src={order.proof_of_purchase_url} alt={`Proof for ${order.id}`} fill className="object-contain" />
                                                                                 </div>
                                                                             </DialogContent>
                                                                         </Dialog>
-                                                                    )}
+                                                                     )}
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -415,24 +420,24 @@ export default function OrdersPage() {
 
             <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
                 <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle>هل أنت متأكد؟</DialogTitle>
-                        <DialogDescription>
-                            لن تتمكن من التراجع عن هذا الإجراء. سيتم حذف الطلب بشكل دائم.
-                        </DialogDescription>
-                    </DialogHeader>
-                    <DialogFooter>
-                        <DialogClose asChild>
-                            <Button variant="outline">إلغاء</Button>
-                        </DialogClose>
-                        <Button
-                            onClick={confirmDelete}
-                            variant="destructive"
-                            disabled={isPending}
-                        >
-                            {isPending ? <Loader2 className="ms-2 h-4 w-4 animate-spin" /> : 'حذف'}
-                        </Button>
-                    </DialogFooter>
+                <DialogHeader>
+                    <DialogTitle>هل أنت متأكد؟</DialogTitle>
+                    <DialogDescription>
+                    لن تتمكن من التراجع عن هذا الإجراء. سيتم حذف الطلب بشكل دائم.
+                    </DialogDescription>
+                </DialogHeader>
+                <DialogFooter>
+                    <DialogClose asChild>
+                        <Button variant="outline">إلغاء</Button>
+                    </DialogClose>
+                    <Button
+                        onClick={confirmDelete}
+                        variant="destructive"
+                        disabled={isPending}
+                    >
+                     {isPending ? <Loader2 className="ms-2 h-4 w-4 animate-spin" /> : 'حذف'}
+                    </Button>
+                </DialogFooter>
                 </DialogContent>
             </Dialog>
         </>

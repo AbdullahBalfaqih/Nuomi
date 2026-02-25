@@ -1,7 +1,6 @@
-
 'use client';
 
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose, SheetFooter } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/app/layout';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -73,38 +72,38 @@ export function Cart({ children }: { children: React.ReactNode }) {
                 ))}
               </div>
             </ScrollArea>
-            <SheetFooter className="mt-auto border-t bg-secondary/50 p-6 flex flex-col gap-4">
-                <div className="space-y-2 text-sm">
-                    <div className="flex justify-between">
+            <div className="mt-auto border-t bg-secondary/50 p-6 space-y-4">
+                <div className="space-y-3 text-sm">
+                    <div className="flex justify-between items-center">
                         <span className="text-muted-foreground">المجموع الفرعي</span>
-                        <PriceDisplay amount={subtotal} />
+                        <PriceDisplay amount={subtotal} className="text-sm font-semibold" />
                     </div>
                     {userDiscountPercentage > 0 && (
-                        <div className="flex justify-between text-green-600">
+                        <div className="flex justify-between items-center text-green-600">
                            <span className="flex items-center gap-1">
                                 الخصم ({userDiscountPercentage}%)
                                 <Percent className="h-3 w-3" />
                            </span>
-                           <span>-<PriceDisplay amount={discount} /></span>
+                           <span className="font-semibold flex items-center">-<PriceDisplay amount={discount} className="text-sm font-semibold text-green-600" /></span>
                         </div>
                     )}
-                     <div className="flex justify-between">
+                     <div className="flex justify-between items-center">
                         <span className="text-muted-foreground">الضريبة (15%)</span>
-                        <PriceDisplay amount={tax} />
+                        <PriceDisplay amount={tax} className="text-sm font-semibold" />
                     </div>
                 </div>
                 <Separator />
                 <div className="w-full flex justify-between items-center text-lg">
-                    <span className="text-muted-foreground">الإجمالي</span>
-                    <PriceDisplay amount={total} className="font-semibold" />
+                    <span className="font-bold">الإجمالي</span>
+                    <PriceDisplay amount={total} className="font-bold text-lg" />
                 </div>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-2 gap-2 mt-2">
                     <SheetClose asChild>
                       <Button asChild className="w-full" size="lg"><Link href="/checkout">الانتقال إلى الدفع</Link></Button>
                     </SheetClose>
                     <Button className="w-full" size="lg" variant="outline" onClick={clearCart}>إفراغ السلة</Button>
                 </div>
-            </SheetFooter>
+            </div>
           </>
         ) : (
           <div className="flex-grow flex flex-col items-center justify-center gap-4 text-center p-6">

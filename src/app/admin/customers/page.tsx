@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState, useEffect, useCallback, useTransition } from 'react';
@@ -11,7 +12,7 @@ import {
 } from '@/components/ui/table';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { PlusCircle, File, MoreHorizontal, Eye, EyeOff, ChevronRight, ChevronLeft, Trash2, Loader2, ShieldCheck, User } from 'lucide-react';
+import { PlusCircle, File, MoreHorizontal, Eye, EyeOff, ChevronRight, ChevronLeft, Trash2, Loader2, ShieldCheck, User, Percent } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -73,12 +74,13 @@ export default function CustomersPage() {
         { header: 'البريد الإلكتروني', dataKey: 'email' },
         { header: 'اسم المستخدم', dataKey: 'username' },
         { header: 'الدور', dataKey: 'role' },
+        { header: 'الخصم', dataKey: 'discount' },
         { header: 'الهاتف', dataKey: 'phone' },
         { header: 'المدينة', dataKey: 'city' },
         { header: 'العنوان', dataKey: 'address' },
     ];
     
-    const reportHtml = generateReportHtml(title, columns, customers);
+    const reportHtml = generateReportHtml(title, columns, customers.map(c => ({...c, discount: `${c.discount}%` })));
     const blob = new Blob([reportHtml], { type: 'text/html' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -119,7 +121,7 @@ export default function CustomersPage() {
     setIsDeleteDialogOpen(true);
   };
 
-  const confirmDelete = async () => {
+  const confirmDelete = () => {
     if (!customerToDelete) return;
     
     startTransition(async () => {
@@ -154,7 +156,7 @@ export default function CustomersPage() {
             if (result.error) {
                  toast({ title: 'فشل التحديث', description: result.error, variant: 'destructive' });
             } else {
-                 toast({ title: 'تم الحفظ!', description: `تم تحديث العميل.`, variant: 'default' });
+                 toast({ title: 'تم الحفظ!', description: `تم تحديث العميل بنجاح.`, variant: 'default' });
                  fetchCustomers();
                  setIsFormOpen(false);
                  setEditingCustomer(null);
@@ -170,7 +172,7 @@ export default function CustomersPage() {
             if(result.error) {
                 toast({ title: 'فشل الإنشاء', description: result.error, variant: 'destructive' });
             } else {
-                toast({ title: 'تم الحفظ!', description: `تم إضافة العميل.`, variant: 'default' });
+                toast({ title: 'تم الحفظ!', description: `تم إضافة العميل بنجاح.`, variant: 'default' });
                 fetchCustomers();
                 setIsFormOpen(false);
                 setEditingCustomer(null);
@@ -205,6 +207,7 @@ export default function CustomersPage() {
             <TableRow className="bg-primary hover:bg-primary/90">
               <TableHead className="text-primary-foreground">العميل</TableHead>
               <TableHead className="hidden sm:table-cell text-primary-foreground">الدور</TableHead>
+              <TableHead className="hidden sm:table-cell text-primary-foreground">الخصم</TableHead>
               <TableHead className="hidden md:table-cell text-primary-foreground">الهاتف</TableHead>
               <TableHead className="hidden md:table-cell text-primary-foreground">المدينة</TableHead>
               <TableHead className="hidden lg:table-cell text-primary-foreground">العنوان</TableHead>
@@ -216,13 +219,13 @@ export default function CustomersPage() {
           <TableBody>
             {loading ? (
                  <TableRow>
-                    <TableCell colSpan={6} className="h-24 text-center">
+                    <TableCell colSpan={7} className="h-24 text-center">
                         <Loader2 className="mx-auto h-8 w-8 animate-spin" />
                     </TableCell>
                 </TableRow>
             ) : currentCustomers.length === 0 ? (
                 <TableRow>
-                    <TableCell colSpan={6} className="h-24 text-center">
+                    <TableCell colSpan={7} className="h-24 text-center">
                         لم يتم العثور على عملاء.
                     </TableCell>
                 </TableRow>
@@ -257,6 +260,7 @@ export default function CustomersPage() {
                             {customer.role === 'admin' ? 'مشرف' : 'عميل'}
                          </Badge>
                     </TableCell>
+                    <TableCell className="hidden sm:table-cell font-medium">{customer.discount || 0}%</TableCell>
                     <TableCell className="hidden md:table-cell">{customer.phone}</TableCell>
                     <TableCell className="hidden md:table-cell">{customer.city}</TableCell>
                     <TableCell className="hidden lg:table-cell">{customer.address}</TableCell>
@@ -350,6 +354,10 @@ export default function CustomersPage() {
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="password" className="text-right">كلمة المرور</Label>
                 <Input id="password" name="password" type="password" placeholder={editingCustomer?.id ? 'اتركه فارغًا لعدم التغيير' : ''} className="col-span-3" />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="discount" className="text-right">الخصم (%)</Label>
+                <Input id="discount" name="discount" type="number" defaultValue={editingCustomer?.discount || 0} className="col-span-3" />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="phone" className="text-right">الهاتف</Label>

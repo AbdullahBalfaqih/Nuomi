@@ -122,7 +122,7 @@ export default function RootLayout({
     <html lang="ar" dir="rtl">
       <head>
         <title>NUOMI - اكـــســسوارات دوالـــيـب الــمــطـابــخ والمـــلابــس </title>
-        <meta name="description" content="NUOMI هو قالب متميز لمصممي الديكور والمهندسين المعماريين واستوديوهات التصميم." />
+        <meta name="description" content="NUOMI هو متجر الكتروني متميز لاكـــســسوارات دوالـــيـب الــمــطـابــخ والمـــلابــس." />
       </head>
       <body className="font-body antialiased">
         <FirebaseClientProvider>

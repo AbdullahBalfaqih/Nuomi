@@ -121,7 +121,7 @@ export default function RootLayout({
   return (
     <html lang="ar" dir="rtl">
       <head>
-        <title>NUOMI - تصميم وديكور داخلي فاخر</title>
+        <title>NUOMI - اكـــســسوارات دوالـــيـب الــمــطـابــخ والمـــلابــس </title>
         <meta name="description" content="NUOMI هو قالب متميز لمصممي الديكور والمهندسين المعماريين واستوديوهات التصميم." />
       </head>
       <body className="font-body antialiased">

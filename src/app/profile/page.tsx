@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -31,22 +30,18 @@ const formatDate = (dateString: string) => {
 };
 
 export default function ProfilePage() {
-  const { isAuthenticated, user } = useAuthContext();
+  const { isAuthenticated, user, loading: authLoading } = useAuthContext();
   const router = useRouter();
   const [allOrders, setAllOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const { toast } = useToast();
-  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   
   useEffect(() => {
-    if (user !== undefined) {
-      setIsCheckingAuth(false);
-      if (!isAuthenticated) {
+    if (!authLoading && !isAuthenticated) {
         router.replace('/login');
-      } else {
+    } else if (isAuthenticated && user?.id) {
         const fetchOrders = async () => {
-          if (!user?.id) return;
           setLoading(true);
           const result = await getMyOrders(user.id);
           if (result.error) {
@@ -57,9 +52,9 @@ export default function ProfilePage() {
           setLoading(false);
         };
         fetchOrders();
-      }
+      
     }
-  }, [isAuthenticated, user, router, toast]);
+  }, [authLoading, isAuthenticated, user, router, toast]);
 
   const handleGenerateReport = () => {
     const userDisplayName = user?.user_metadata?.name || user?.email || 'مستخدم';
@@ -115,11 +110,9 @@ export default function ProfilePage() {
                 font-weight: bold;
                 color: #16a085;
               }
-              .company-info h2 {
-                font-family: 'Playfair Display', serif;
-                font-weight: bold;
-                color: #374151;
-                margin: 0;
+              .company-info img {
+                height: 31px;
+                width: auto;
               }
               .company-info p {
                 font-size: 0.875rem;
@@ -163,7 +156,7 @@ export default function ProfilePage() {
           <div class="report-container">
               <header>
                   <div class="company-info">
-                      <h2>NUOMI</h2>
+                      <img src="https://res.cloudinary.com/ddznxtb6f/image/upload/v1773617679/_PhotoFixerBot_23-31-36_UTC-removebg-preview_xwt1h8.png" alt="NUOMI Logo" />
                       <p>شركة تصميم وديكور داخلي فاخر</p>
                       <p>123 الشارع الرئيسي, أوستن, تكساس 78701</p>
                   </div>
@@ -225,7 +218,7 @@ export default function ProfilePage() {
     setCurrentPage((prev) => (prev > 1 ? prev - 1 : prev));
   };
 
-  if (isCheckingAuth || !isAuthenticated) {
+  if (authLoading) {
     return (
         <div className="flex items-center justify-center h-screen bg-background">
             <div className="flex flex-col items-center gap-4">

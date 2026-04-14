@@ -69,9 +69,9 @@ export const generateReportHtml = (title: string, columns: { header: string; dat
                 font-weight: bold;
                 color: #16a085;
               }
-              .company-info svg {
+              .company-info img {
                   height: 31px;
-                  width: 114px;
+                  width: auto;
               }
               .company-info p {
                 font-size: 0.875rem;
@@ -111,9 +111,7 @@ export const generateReportHtml = (title: string, columns: { header: string; dat
           <div class="report-container">
               <header>
                   <div class="company-info">
-                      <svg width="114" height="31" viewBox="0 0 114 31" fill="#111827" xmlns="http://www.w3.org/2000/svg" aria-label="NUOMI Logo">
-                          <text x="0" y="24" font-family="Playfair Display, serif" font-size="30" font-weight="bold" letter-spacing="2">NUOMI</text>
-                      </svg>
+                      <img src="https://res.cloudinary.com/ddznxtb6f/image/upload/v1773617679/_PhotoFixerBot_23-31-36_UTC-removebg-preview_xwt1h8.png" alt="NUOMI Logo" />
                       <p>شركة تصميم وديكور داخلي فاخر</p>
                   </div>
                   <h1>${title}</h1>

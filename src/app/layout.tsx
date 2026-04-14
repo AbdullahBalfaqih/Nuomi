@@ -122,7 +122,7 @@ export default function RootLayout({
     <html lang="ar" dir="rtl">
       <head>
         <title> Wood Craft - اكـــســسوارات دوالـــيـب الــمــطـابــخ والمـــلابــس </title>
-        <meta name="description" content="NUOMI هو متجر الكتروني متميز لاكـــســسوارات دوالـــيـب الــمــطـابــخ والمـــلابــس." />
+        <meta name="description" content=" Wood Craft هو متجر الكتروني متميز لاكـــســسوارات دوالـــيـب الــمــطـابــخ والمـــلابــس." />
       </head>
       <body className="font-body antialiased">
         <FirebaseClientProvider>

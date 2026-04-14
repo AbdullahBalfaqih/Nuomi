@@ -11,7 +11,7 @@ export default function Logo({ className }: LogoProps) {
   
   return (
       <div className={cn("relative h-[62px] w-[228px]", className)}>
-        <Image src={logoUrl} alt="NUOMI Logo" fill className="object-contain" />
+        <Image src={logoUrl} alt=" Wood Craft Logo" fill className="object-contain" />
       </div>
   );
 }

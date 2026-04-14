@@ -143,7 +143,7 @@ export default function Footer() {
       bg-clip-text
     "
                   >
-                      NUOMI
+                       Wood Craft
                   </div>
 
                   {/* الفوتر */}
@@ -158,7 +158,7 @@ export default function Footer() {
       text-white/50
     "
                   >
-                      <p>&copy; {new Date().getFullYear()} NUOMI. جميع الحقوق محفوظة.</p>
+                      <p>&copy; {new Date().getFullYear()}  Wood Craft. جميع الحقوق محفوظة.</p>
 
                       <div className="flex space-x-4 mt-4 md:mt-0">
                           {legalLinks.map((link) => (

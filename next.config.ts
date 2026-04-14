@@ -34,10 +34,13 @@ const nextConfig: NextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
+        port: '',
+        pathname: '/**',
+      },
     ],
-  },
-  serverActions: {
-    bodySizeLimit: '2mb',
   },
 };
 

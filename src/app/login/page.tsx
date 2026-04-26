@@ -13,7 +13,7 @@ import { useRouter } from 'next/navigation';
 import Logo from '@/components/logo';
 import { getSupabaseBrowserClient } from '@/lib/supabase-client';
 import a from "./login.png";
-import b from "./logo.png";
+
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -233,15 +233,9 @@ export default function LoginPage() {
                 className="mx-auto grid w-[400px] gap-8"
               >
                 <motion.div variants={itemVariants} className="grid gap-4 text-center">
-                                      <div className="relative h-24 md:h-16 w-full">
-                                          <Image
-                                              src={b}
-                                              alt="Contact support"
-                                              fill
-                                              className="object-fill"   // ← Stretch
-                                          />
-
-                                      </div>
+                                  <div className="flex justify-center items-center text-foreground mb-4">
+                     <Logo />
+                   </div>
                                   
                   <motion.h1 variants={itemVariants} className="text-3xl font-bold">
                     {mode === 'login' && 'أهلاً بك في منزلك'}

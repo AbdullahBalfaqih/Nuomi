@@ -3,7 +3,6 @@ import type { Metadata } from 'next';
 import { Toaster } from "@/components/ui/toaster"
 import './globals.css';
 import { MotionProvider } from '@/components/motion/motion-provider';
-import { FirebaseClientProvider } from '@/firebase';
 import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import type { Product } from '@/lib/products';
 import { AuthProvider, useAuthContext } from '@/auth/context';
@@ -121,20 +120,18 @@ export default function RootLayout({
   return (
     <html lang="ar" dir="rtl">
       <head>
-        <title> Wood Craft - اكـــســسوارات دوالـــيـب الــمــطـابــخ والمـــلابــس </title>
-        <meta name="description" content=" Wood Craft هو متجر الكتروني متميز لاكـــســسوارات دوالـــيـب الــمــطـابــخ والمـــلابــس." />
+        <title>Wood Craft</title>
+        <meta name="description" content="Wood Craft هو قالب متميز لمصممي الديكور والمهندسين المعماريين واستوديوهات التصميم." />
       </head>
       <body className="font-body antialiased">
-        <FirebaseClientProvider>
-          <AuthProvider>
-            <CartProvider>
-              <MotionProvider>
-                {children}
-              </MotionProvider>
-              <Toaster />
-            </CartProvider>
-          </AuthProvider>
-        </FirebaseClientProvider>
+        <AuthProvider>
+          <CartProvider>
+            <MotionProvider>
+              {children}
+            </MotionProvider>
+            <Toaster />
+          </CartProvider>
+        </AuthProvider>
       </body>
     </html>
   );

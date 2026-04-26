@@ -6,13 +6,14 @@ import { User, Eye, Check, X, Mail } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import GoogleLogo from '@/components/icons/google-logo';
-import AppleLogo from '@/components/icons/apple-logo';
+import AppleLogo from '@/components/icons/facebook-logo';
 import TwitterLogo from '@/components/icons/twitter-logo';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import Logo from '@/components/logo';
-import { useAuthContext } from '@/auth/context';
-
+import { getSupabaseBrowserClient } from '@/lib/supabase-client';
+import a from "./login.png";
+import b from "./logo.png";
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -57,17 +58,10 @@ export default function LoginPage() {
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const router = useRouter();
-  const { supabase } = useAuthContext();
+  const supabase = getSupabaseBrowserClient();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!supabase) {
-        setErrorMessage('خدمة المصادقة غير متاحة حاليًا.');
-        setStatus('error');
-        setTimeout(() => setStatus('idle'), 5000);
-        return;
-    }
-
     setStatus('loading');
     setErrorMessage('');
 
@@ -124,13 +118,6 @@ export default function LoginPage() {
   
   const handleForgotPassword = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!supabase) {
-        setErrorMessage('خدمة المصادقة غير متاحة حاليًا.');
-        setStatus('error');
-        setTimeout(() => setStatus('idle'), 3000);
-        return;
-    }
-
     setStatus('loading');
     setErrorMessage('');
     setSuccessMessage('');
@@ -231,25 +218,31 @@ export default function LoginPage() {
                 className="w-full h-full"
                 variants={imageVariants}
               >
-                <Image
-                  src="https://picsum.photos/seed/furniture/1200/1800"
-                  alt="Modern living room with stylish furniture"
-                  data-ai-hint="stylish furniture"
-                  layout="fill"
-                  objectFit="cover"
-                  className="rounded-r-3xl"
-                />
+                                  <Image
+                                      src={a}
+                                      alt="Contact support"
+                                      fill
+                                      className="object-fill"   // ← Stretch
+                                  />
               </motion.div>
-            </div>
+                          </div>
+
             <div className="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
               <motion.div
                 variants={containerVariants}
                 className="mx-auto grid w-[400px] gap-8"
               >
                 <motion.div variants={itemVariants} className="grid gap-4 text-center">
-                   <div className="flex justify-center items-center text-foreground mb-4">
-                     <Logo />
-                   </div>
+                                      <div className="relative h-24 md:h-16 w-full">
+                                          <Image
+                                              src={b}
+                                              alt="Contact support"
+                                              fill
+                                              className="object-fill"   // ← Stretch
+                                          />
+
+                                      </div>
+                                  
                   <motion.h1 variants={itemVariants} className="text-3xl font-bold">
                     {mode === 'login' && 'أهلاً بك في منزلك'}
                     {mode === 'forgotPassword' && 'إعادة تعيين كلمة المرور'}

@@ -64,7 +64,7 @@ export default function LoginPage() {
     if (!supabase) {
         setErrorMessage('خدمة المصادقة غير متاحة حاليًا.');
         setStatus('error');
-        setTimeout(() => setStatus('idle'), 2000);
+        setTimeout(() => setStatus('idle'), 5000);
         return;
     }
 
